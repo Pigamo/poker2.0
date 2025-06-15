@@ -1,0 +1,8 @@
+## Poker 2.0
+
+##### Run it with this:
+```bash
+python poker.py --games 1000 --players 5
+```
+
+##### Note the `--games` and `--players` arguments can be adjusted to simulate different scenarios.
