@@ -20,7 +20,7 @@ def translate_card(card: Card) -> str:
     return RANK_NAMES[idx]
 
 
-def checkNum(cards: List[int]) -> List[int]:
+def sublist(cards: List[int]) -> List[int]:
     nums = []
     for i in range(len(cards) - 1):
         nums.append(cards[i+1] - cards[i])
