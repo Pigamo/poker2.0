@@ -6,10 +6,14 @@ from hand import Hand
 from score import Score
 from plotter import plot_scores
 from utils import sublist, checkStraight, checkSuperStraight, checkFlush, silent, silentPrint
-
+HAND_TYPES = [
+    "High Card", "One Pair", "Two Pair", "Three of a Kind",
+    "Straight", "Flush", "Full House", "Four of a Kind",
+    "Straight Flush", "Royal Flush"
+	]
 class Hand_Identity(Hand):
 	def __init__(self, hand: Hand):
-		super().__init__(hand)
+		#super().__init__(hand)
 		self.ranks = [int(c.get_rank()) for c in hand.get_cards()]
 		self.suits = [c.get_suit() for c in hand.get_cards()]
 		self.sortedranks = self.ranks.sort()
@@ -25,13 +29,10 @@ class Hand_Identity(Hand):
 		self.straight_flush = False
 		self.royal_flush = False'''
 		self.handvalue = 0
-		self.hand_types = [
-    "High Card", "One Pair", "Two Pair", "Three of a Kind",
-    "Straight", "Flush", "Full House", "Four of a Kind",
-    "Straight Flush", "Royal Flush"
-]
-	def handtype(self)-> bool:
-		if (self.sublist.count(0)>=1) or (self.sublist.count(1) == 4) or (len(set(self.suits)) == 1) or ((self.sublist[0] == 9) and (numbers.count(1) == 3)):
+		
+		self.handtype()
+	def handtype(self)-> int:
+		if (self.sublist.count(0)>=1) or (self.sublist.count(1) == 4) or (len(set(self.suits)) == 1) or ((self.sublist[0] == 9) and (self.sublist.count(1) == 3)):
 			if self.sublist.count(0)>=1:
 				if self.sublist.count(0) == 1:
 					self.handvalue = 1
@@ -48,12 +49,12 @@ class Hand_Identity(Hand):
 					else:
 						self.handvalue = 7
 			elif self.sublist.count(1) == 4:
-				if len(set(self.sublist) == 1):
+				if len(set(self.suits)) == 1:
 					self.handvalue = 8
 				else:
 					self.handvalue = 4
-			elif (self.sublist[0] == 9) and (numbers.count(1) == 3):
-				if len(set(self.sublist) == 1):
+			elif (self.sublist[0] == 9) and (self.sublist.count(1) == 3):
+				if len(set(self.suits)) == 1:
 					self.handvalue = 9
 				else:
 					self.handvalue = 4
@@ -62,12 +63,15 @@ class Hand_Identity(Hand):
 		else:
 			self.handvalue = 0
 	def __str__(self)-> str:
-		return f"{self.hand_types[self.handvalue]}"
+		return f"{HAND_TYPES[self.handvalue]}"
 
-deck = list(fulldeck)
-newhand = Hand(draw_cards(deck))
-handtype = Hand_Identity(newhand)
-print(handtype)
+#deck = list(fulldeck)
+#newhand = Hand(draw_cards(deck))
+#print(newhand)
+#handtype = Hand_Identity(newhand)
+#handtype.handtype()
+#print(handtype)
+
 
 def checkStraight(numbers: List[int]) -> bool:
     return numbers.count(1) == 4

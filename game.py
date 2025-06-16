@@ -5,7 +5,7 @@ from deck import create_deck, draw_cards,fulldeck
 from hand import Hand
 from score import Score
 from plotter import plot_scores
-from utils import checkNum, checkStraight, checkSuperStraight, checkFlush, silent, silentPrint
+from utils import sublist, checkStraight, checkSuperStraight, checkFlush, silent, silentPrint
 
 HAND_NAMES = [
     "High Card", "One Pair", "Two Pair", "Three of a Kind",
@@ -18,7 +18,7 @@ def score_hand(hand: Hand, score: Score) -> int:
     ranks = [int(c.get_rank()) for c in cards]
     suits = [c.get_suit() for c in cards]
     ranks.sort()
-    numbers = checkNum(ranks)
+    numbers = sublist(ranks)
     handValue = 0
 
     if checkSuperStraight(numbers):
@@ -70,7 +70,7 @@ def score_hand(hand: Hand, score: Score) -> int:
     return handValue
 
 
-
+from hand_identifier import Hand_Identity 
 def deal_game(num_players: int, score: Score):
     silentPrint(f'{num_players} Player Game\n')
     deck = list(fulldeck)
@@ -78,11 +78,13 @@ def deal_game(num_players: int, score: Score):
     
     for i in range(num_players):
         newHand = Hand(draw_cards(deck))
-        scoredHand = score_hand(newHand, score)
+        scoredHand = Hand_Identity(newHand)
+        score.getScore(scoredHand.handvalue)
+        #scoredHand = score_hand(newHand, score)
         #print(f'Player {i+1}: ', newHand,handNames[scoredHand], '\n')
-        
-       
-        gameTracker.append({'player': f'Player {i+1}','score': scoredHand, 'name':HAND_NAMES[scoredHand], 'hand': newHand})
+        #print('score', scoredHand)
+        #gameTracker.append({'player': f'Player {i+1}','score': scoredHand, 'name':HAND_NAMES[scoredHand], 'hand': newHand})
+        gameTracker.append({'player': f'Player {i+1}','score': scoredHand.handvalue, 'name':f"{scoredHand}", 'hand': newHand})
     gameTracker.sort(key=lambda x: x['score'], reverse=True)
     # print(gameTracker)
     silentPrint(tabulate(gameTracker, headers="keys"))
@@ -90,14 +92,17 @@ def deal_game(num_players: int, score: Score):
     silentPrint(f"\n| {winner['player']} WINS\n| With a {winner['name']}\n| {winner['hand']}")
     silentPrint('\nEnd\n')
 
-
+import time
 def play_multi(num_games: int, num_players: int):
     score = Score()
     print(f'\nSimulating {num_games} games with {num_players} players\n')
+    start = time.perf_counter()
     score = Score()
     for i in range(num_games):
         silentPrint(f'Game {i+1}')
         deal_game(num_players, score)
+    end = time.perf_counter()
+    print(f"Elapsed: {end - start:.6f} seconds")
     total_hands = num_games * num_players
     plot_scores(score.get_scores(), total_hands)
 

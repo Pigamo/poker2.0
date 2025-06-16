@@ -13,6 +13,29 @@ class Score:
         self.pair = 0
         self.high_card = 0
         self.super_straight = 0
+    def getScore(self, score: int) -> int:
+        if score == 9:
+            self.set_royal_flush()
+        elif score == 8:
+            self.set_straight_flush()
+        elif score == 7:
+            self.set_quad()
+        elif score == 6:
+            self.set_full_house()
+        elif score == 5:
+            self.set_flush()
+        elif score == 4:
+            self.set_straight()
+        elif score == 3:
+            self.set_trips()
+        elif score == 2:
+            self.set_two_pair()
+        elif score == 1:
+            self.set_pair()
+        elif score == 0:
+            self.set_high()
+
+
 
     def set_royal_flush(self):   self.royal_flush += 1
     def set_super_straight(self): self.super_straight += 1
