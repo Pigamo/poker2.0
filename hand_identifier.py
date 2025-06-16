@@ -32,36 +32,39 @@ class Hand_Identity(Hand):
 		
 		self.handtype()
 	def handtype(self)-> int:
-		if (self.sublist.count(0)>=1) or (self.sublist.count(1) == 4) or (len(set(self.suits)) == 1) or ((self.sublist[0] == 9) and (self.sublist.count(1) == 3)):
-			if self.sublist.count(0)>=1:
-				if self.sublist.count(0) == 1:
-					self.handvalue = 1
-				elif self.sublist.count(0) == 2:
-					if ((self.sublist[0]==0 and self.sublist[2]==0) or 
+		if ((len(set(self.suits)) > 1)) and (self.sublist.count(1)<4) and (self.sublist.count(0)<1):
+			self.handvalue = 0
+		
+		
+		
+		elif self.sublist.count(0) == 1:
+				self.handvalue = 1
+		elif self.sublist.count(0) == 2:
+				if ((self.sublist[0]==0 and self.sublist[2]==0) or 
 						(self.sublist[1]==0 and self.sublist[3]==0) or 
 						(self.sublist[0]==0 and self.sublist[3]==0)):
 						self.handvalue = 2
-					else:
+				else:
 						self.handvalue = 3
-				elif self.sublist.count(0) == 3:
-					if self.sublist[0] == 0 and self.sublist[3] == 0:
+		elif self.sublist.count(0) == 3:
+				if self.sublist[0] == 0 and self.sublist[3] == 0:
 						self.handvalue = 6
-					else:
+				else:
 						self.handvalue = 7
-			elif self.sublist.count(1) == 4:
-				if len(set(self.suits)) == 1:
+		elif self.sublist.count(1) == 4:
+			if len(set(self.suits)) == 1:
 					self.handvalue = 8
-				else:
-					self.handvalue = 4
-			elif (self.sublist[0] == 9) and (self.sublist.count(1) == 3):
-				if len(set(self.suits)) == 1:
-					self.handvalue = 9
-				else:
-					self.handvalue = 4
 			else:
+					self.handvalue = 4
+		
+		elif len(set(self.suits)) == 1:
 				self.handvalue = 5
-		else:
-			self.handvalue = 0
+		elif (self.sublist[0] == 9) and (self.sublist.count(1) == 3):
+			if len(set(self.suits)) == 1:
+					self.handvalue = 9
+			else:
+					self.handvalue = 4
+		
 	def __str__(self)-> str:
 		return f"{HAND_TYPES[self.handvalue]}"
 
