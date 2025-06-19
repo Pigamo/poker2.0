@@ -11,6 +11,14 @@ HAND_TYPES = [
     "Straight", "Flush", "Full House", "Four of a Kind",
     "Straight Flush", "Royal Flush"
 	]
+from collections import Counter
+def cluster_multiples_first(ranks):
+    
+        freq = Counter(ranks)                 # count each rank
+        return sorted(
+            ranks,
+            key=lambda r: (-freq[r], -r)      # 1) bigger group first, 2) bigger rank first
+        )
 class Hand_Identity(Hand):
 	def __init__(self, hand: Hand):
 		#super().__init__(hand)
@@ -29,42 +37,39 @@ class Hand_Identity(Hand):
 		self.straight_flush = False
 		self.royal_flush = False'''
 		self.handvalue = 0
-		
+		self.ranks = cluster_multiples_first(self.ranks)
 		self.handtype()
 	def handtype(self)-> int:
-		if ((len(set(self.suits)) > 1)) and (self.sublist.count(1)<4) and (self.sublist.count(0)<1):
-			self.handvalue = 0
-		
-		
-		
-		elif self.sublist.count(0) == 1:
-				self.handvalue = 1
-		elif self.sublist.count(0) == 2:
-				if ((self.sublist[0]==0 and self.sublist[2]==0) or 
+		if (self.sublist.count(0)>=1) or (self.sublist.count(1) == 4) or (len(set(self.suits)) == 1) or ((self.sublist[0] == 9) and (self.sublist.count(1) == 3)):
+			if self.sublist.count(0)>=1:
+				if self.sublist.count(0) == 1:
+					self.handvalue = 1
+				elif self.sublist.count(0) == 2:
+					if ((self.sublist[0]==0 and self.sublist[2]==0) or 
 						(self.sublist[1]==0 and self.sublist[3]==0) or 
 						(self.sublist[0]==0 and self.sublist[3]==0)):
 						self.handvalue = 2
-				else:
+					else:
 						self.handvalue = 3
-		elif self.sublist.count(0) == 3:
-				if self.sublist[0] == 0 and self.sublist[3] == 0:
+				elif self.sublist.count(0) == 3:
+					if self.sublist[0] == 0 and self.sublist[3] == 0:
 						self.handvalue = 6
-				else:
+					else:
 						self.handvalue = 7
-		elif self.sublist.count(1) == 4:
-			if len(set(self.suits)) == 1:
+			elif self.sublist.count(1) == 4:
+				if len(set(self.suits)) == 1:
 					self.handvalue = 8
-			else:
+				else:
 					self.handvalue = 4
-		
-		elif len(set(self.suits)) == 1:
-				self.handvalue = 5
-		elif (self.sublist[0] == 9) and (self.sublist.count(1) == 3):
-			if len(set(self.suits)) == 1:
+			elif (self.sublist[0] == 9) and (self.sublist.count(1) == 3):
+				if len(set(self.suits)) == 1:
 					self.handvalue = 9
-			else:
+				else:
 					self.handvalue = 4
-		
+			else:
+				self.handvalue = 5
+		else:
+			self.handvalue = 0
 	def __str__(self)-> str:
 		return f"{HAND_TYPES[self.handvalue]}"
 
